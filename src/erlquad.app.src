@@ -1,0 +1,14 @@
+{application, erlquad,
+ [
+  {description, "Erlang quadtree"},
+  {vsn, git},
+  {modules, [
+             erlquad
+            ]},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {env, []}
+ ]}.
