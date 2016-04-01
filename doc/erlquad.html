@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module erlquad</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module erlquad</h1>
+<ul class="index"><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+
+
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-box">box()</a></h3>
+<p><tt>box() = {Left::number(), Bottom::number(), Right::number(), Top::number()}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-erlquad_node">erlquad_node()</a></h3>
+<p><tt>erlquad_node() = #erlquad_node{}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-fold_fun">fold_fun()</a></h3>
+<p><tt>fold_fun() = fun((Object::term(), Acc::term()) -&gt; NewAcc::term())</tt></p>
+
+
+<h3 class="typedecl"><a name="type-object_box_fun">object_box_fun()</a></h3>
+<p><tt>object_box_fun() = fun((Object::term()) -&gt; <a href="#type-box">box()</a>)</tt></p>
+
+
+<h3 class="typedecl"><a name="type-predicate">predicate()</a></h3>
+<p><tt>predicate() = fun((Object::term()) -&gt; boolean())</tt></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#area_query-5">area_query/5</a></td><td></td></tr>
+<tr><td valign="top"><a href="#area_query_any-6">area_query_any/6</a></td><td></td></tr>
+<tr><td valign="top"><a href="#area_query_deep-5">area_query_deep/5</a></td><td></td></tr>
+<tr><td valign="top"><a href="#area_query_fold-7">area_query_fold/7</a></td><td></td></tr>
+<tr><td valign="top"><a href="#new-5">new/5</a></td><td></td></tr>
+<tr><td valign="top"><a href="#objects_add-3">objects_add/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#objects_all-1">objects_all/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#objects_any-2">objects_any/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#objects_deep_all-1">objects_deep_all/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#objects_fold-3">objects_fold/3</a></td><td></td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="area_query-5">area_query/5</a></h3>
+<div class="spec">
+<p><tt>area_query(Left::number(), Bottom::number(), Right::number(), Top::number(), QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; Objects::[term()]</tt><br></p>
+</div>
+
+<h3 class="function"><a name="area_query_any-6">area_query_any/6</a></h3>
+<div class="spec">
+<p><tt>area_query_any(Predicate::<a href="#type-predicate">predicate()</a>, Left::number(), Bottom::number(), Right::number(), Top::number(), QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; boolean()</tt><br></p>
+</div>
+
+<h3 class="function"><a name="area_query_deep-5">area_query_deep/5</a></h3>
+<div class="spec">
+<p><tt>area_query_deep(Left::number(), Bottom::number(), Right::number(), Top::number(), QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; DeepObjectList::[term(), ...]</tt><br></p>
+</div>
+
+<h3 class="function"><a name="area_query_fold-7">area_query_fold/7</a></h3>
+<div class="spec">
+<p><tt>area_query_fold(FoldFun::<a href="#type-fold_fun">fold_fun()</a>, FoldAcc0::term(), Left::number(), Bottom::number(), Right::number(), Top::number(), QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; FoldAccN::term()</tt><br></p>
+</div>
+
+<h3 class="function"><a name="new-5">new/5</a></h3>
+<div class="spec">
+<p><tt>new(Left::number(), Bottom::number(), Right::number(), Top::number(), Depth::non_neg_integer()) -&gt; <a href="#type-erlquad_node">erlquad_node()</a></tt><br></p>
+</div>
+
+<h3 class="function"><a name="objects_add-3">objects_add/3</a></h3>
+<div class="spec">
+<p><tt>objects_add(Objects::[term()], GetBoxFun::<a href="#type-object_box_fun">object_box_fun()</a>, QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; <a href="#type-erlquad_node">erlquad_node()</a></tt><br></p>
+</div>
+
+<h3 class="function"><a name="objects_all-1">objects_all/1</a></h3>
+<div class="spec">
+<p><tt>objects_all(QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; Objects::[term()]</tt><br></p>
+</div>
+
+<h3 class="function"><a name="objects_any-2">objects_any/2</a></h3>
+<div class="spec">
+<p><tt>objects_any(Precicate::<a href="#type-predicate">predicate()</a>, QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; boolean()</tt><br></p>
+</div>
+
+<h3 class="function"><a name="objects_deep_all-1">objects_deep_all/1</a></h3>
+<div class="spec">
+<p><tt>objects_deep_all(QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; ObjectsDeepList::[term(), ...]</tt><br></p>
+</div>
+
+<h3 class="function"><a name="objects_fold-3">objects_fold/3</a></h3>
+<div class="spec">
+<p><tt>objects_fold(FoldFun::<a href="#type-fold_fun">fold_fun()</a>, FoldAcc0::term(), QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; FoldAccN::term()</tt><br></p>
+</div>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Apr 1 2016, 01:45:42.</i></p>
+</body>
+</html>

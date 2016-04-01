@@ -1,0 +1,9 @@
+@author Guilherme Andrade <erlquad(at)gandrade(dot)net>
+@copyright 2016 Guilherme Andrade
+@version 1.0.0
+@title erlquad
+@doc `erlquad': A simple Erlang quadtree implementation
+
+<hr/>
+
+Define 'COMPILE_NATIVE_ERLQUAD' (e.g. "rebar compile -DCOMPILE_NATIVE_ERLQUAD") for HiPE compilation.
