@@ -55,8 +55,14 @@
 -type box() :: {Left :: number(), Bottom :: number(), Right :: number(), Top :: number()}.
 -export_type([box/0]).
 
--type object_box_fun() :: fun((Object :: term()) -> box()).
--export_type([object_box_fun/0]).
+-type coordinates() :: {X :: number(), Y :: number()}.
+-export_type([coordinates/0]).
+
+-type outline() :: box() | coordinates().
+-export_type([outline/0]).
+
+-type object_outline_fun() :: fun((Object :: term()) -> outline()).
+-export_type([object_outline_fun/0]).
 
 -type fold_fun() :: fun((Object :: term(), Acc :: term()) -> NewAcc :: term()).
 -export_type([fold_fun/0]).
@@ -105,12 +111,11 @@ new(Left, Bottom, Right, Top, Depth) ->
                                    Top,
                                    Depth - 1)}}. % ?QUADRANT_UPPER_RIGHT
 
-
--spec objects_add(Objects :: [term()], GetBoxFun :: object_box_fun(), QNode :: erlquad_node())
+-spec objects_add(Objects :: [term()], GetOutlineFun :: object_outline_fun(), QNode :: erlquad_node())
 -> erlquad_node().
-objects_add(Objects, GetBoxFun, QNode) ->
+objects_add(Objects, GetOutlineFun, QNode) ->
     lists:foldl(fun (Object, QNodeAcc) ->
-                        object_add_with_box(Object, GetBoxFun(Object), QNodeAcc)
+                        object_add_with_outline(Object, GetOutlineFun(Object), QNodeAcc)
                 end,
                 QNode, Objects).
 
@@ -261,10 +266,10 @@ area_query_any(AnyFun, Left, Bottom, Right, Top, QNode) ->
 %% Internal Function Definitions
 %% ------------------------------------------------------------------
 
--spec object_add_with_box(Object :: term(), Box :: box(), QNode :: erlquad_node())
+-spec object_add_with_outline(Object :: term(), Outline :: outline(), QNode :: erlquad_node())
         -> erlquad_node().
-object_add_with_box(Object, Box, QNode)->
-    case maybe_box_quadrant(Box, QNode) of
+object_add_with_outline(Object, Outline, QNode)->
+    case maybe_get_outline_quadrant(Outline, QNode) of
         ?QUADRANT_NONE ->
             Bucket = QNode#erlquad_node.bucket,
             UpdatedBucket = [Object | Bucket],
@@ -272,16 +277,22 @@ object_add_with_box(Object, Box, QNode)->
         Quadrant ->
             Children = QNode#erlquad_node.children,
             Child = element(Quadrant, Children),
-            UpdatedChild = object_add_with_box(Object, Box, Child),
+            UpdatedChild = object_add_with_outline(Object, Outline, Child),
             UpdatedChildren = setelement(Quadrant, Children, UpdatedChild),
             QNode#erlquad_node{ children = UpdatedChildren }
     end.
 
--spec maybe_box_quadrant(box(), erlquad_node()) -> quadrant() | ?QUADRANT_NONE.
-maybe_box_quadrant(_Box, QNode) when ?IS_LEAF_NODE(QNode) ->
+-spec maybe_get_outline_quadrant(outline(), erlquad_node()) -> quadrant() | ?QUADRANT_NONE.
+maybe_get_outline_quadrant(_Outline, QNode) when ?IS_LEAF_NODE(QNode) ->
+    % Leaf node, we're at the and of the line
     ?QUADRANT_NONE;
-maybe_box_quadrant({Left, Bottom, Right, Top},
-                   #erlquad_node{ split_x = SplitX, split_y = SplitY }) ->
+maybe_get_outline_quadrant({X, Y},
+                           #erlquad_node{ split_x = SplitX, split_y = SplitY }) ->
+    % Precise coordinates
+    splits_quadrant(X, Y, SplitX, SplitY);
+maybe_get_outline_quadrant({Left, Bottom, Right, Top},
+                           #erlquad_node{ split_x = SplitX, split_y = SplitY }) ->
+    % Bounding box
     case splits_quadrant(Left, Bottom, SplitX, SplitY) of
         ?QUADRANT_BOTTOM_LEFT = Q ->
             if Right >= SplitX ->
