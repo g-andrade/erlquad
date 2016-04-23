@@ -245,15 +245,15 @@ area_query_any(AnyFun, Left, Bottom, Right, Top, QNode) ->
     case {LowerQuadrant, HigherQuadrant} of
         {Quadrant, Quadrant} ->
             area_query_any(AnyFun, Left, Bottom, Right, Top,
-                                 element(Quadrant, QNode#erlquad_node.children))
+                           element(Quadrant, QNode#erlquad_node.children))
             orelse lists:any(AnyFun, QNode#erlquad_node.bucket);
         {?QUADRANT_BOTTOM_LEFT, ?QUADRANT_UPPER_RIGHT} ->
             objects_any(AnyFun, QNode);
         _ ->
             area_query_any(AnyFun, Left, Bottom, Right, Top,
-                                 element(LowerQuadrant, QNode#erlquad_node.children))
+                           element(LowerQuadrant, QNode#erlquad_node.children))
             orelse area_query_any(AnyFun, Left, Bottom, Right, Top,
-                                        element(HigherQuadrant, QNode#erlquad_node.children))
+                                  element(HigherQuadrant, QNode#erlquad_node.children))
             orelse lists:any(AnyFun, QNode#erlquad_node.bucket)
     end.
 
@@ -311,7 +311,7 @@ maybe_box_quadrant({Left, Bottom, Right, Top},
             ?QUADRANT_UPPER_RIGHT
     end.
 
--spec splits_quadrant(float(), float(), float(), float())
+-spec splits_quadrant(number(), number(), number(), number())
         -> quadrant().
 splits_quadrant(X, Y, SplitX, SplitY) ->
     if X < SplitX ->
@@ -326,6 +326,6 @@ splits_quadrant(X, Y, SplitX, SplitY) ->
            ?QUADRANT_UPPER_RIGHT
     end.
 
--spec range_split(float(), float()) -> float().
+-spec range_split(number(), number()) -> float().
 range_split(Min, Max) when Max >= Min ->
     Min + ((Max - Min) / 2).
