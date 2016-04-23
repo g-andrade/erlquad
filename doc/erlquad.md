@@ -26,6 +26,18 @@ box() = {Left::number(), Bottom::number(), Right::number(), Top::number()}
 
 
 
+### <a name="type-coordinates">coordinates()</a> ###
+
+
+
+<pre><code>
+coordinates() = {X::number(), Y::number()}
+</code></pre>
+
+
+
+
+
 ### <a name="type-erlquad_node">erlquad_node()</a> ###
 
 
@@ -50,12 +62,24 @@ fold_fun() = fun((Object::term(), Acc::term()) -&gt; NewAcc::term())
 
 
 
-### <a name="type-object_box_fun">object_box_fun()</a> ###
+### <a name="type-object_outline_fun">object_outline_fun()</a> ###
 
 
 
 <pre><code>
-object_box_fun() = fun((Object::term()) -&gt; <a href="#type-box">box()</a>)
+object_outline_fun() = fun((Object::term()) -&gt; <a href="#type-outline">outline()</a>)
+</code></pre>
+
+
+
+
+
+### <a name="type-outline">outline()</a> ###
+
+
+
+<pre><code>
+outline() = <a href="#type-box">box()</a> | <a href="#type-coordinates">coordinates()</a>
 </code></pre>
 
 
@@ -154,7 +178,7 @@ new(Left::number(), Bottom::number(), Right::number(), Top::number(), Depth::non
 
 
 <pre><code>
-objects_add(Objects::[term()], GetBoxFun::<a href="#type-object_box_fun">object_box_fun()</a>, QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; <a href="#type-erlquad_node">erlquad_node()</a>
+objects_add(Objects::[term()], GetOutlineFun::<a href="#type-object_outline_fun">object_outline_fun()</a>, QNode::<a href="#type-erlquad_node">erlquad_node()</a>) -&gt; <a href="#type-erlquad_node">erlquad_node()</a>
 </code></pre>
 
 <br></br>
