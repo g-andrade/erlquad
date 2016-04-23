@@ -14,7 +14,9 @@ __Authors:__ Guilherme Andrade ([`erlquad(at)gandrade(dot)net`](mailto:erlquad(a
 
 `erlquad` is a straightforward Erlang implementation of [quadtrees](https://en.wikipedia.org/wiki/Quadtree), supporting both bounding-box outlines as well as precise coordinates for small enough objects.
 
-It exposes functions for fetching, folding and any'ing (with boolean predicate) particular areas of interest as well as all contained objects. 'Deeplist' versions of fetching methods are also included for when there's no need to concatenate the final results and thus avoid the overhead of doing so.
+It exposes functions for fetching, folding and any'ing (with boolean predicate) particular areas of interest as well as all contained objects. Deeplist versions of fetching methods are also included for when there's no need to concatenate the intermediate results and thus avoid the overhead of doing so.
+
+Buckets have unlimited capacity and depth is fixed on initialization.
 
 ```erlang
 
