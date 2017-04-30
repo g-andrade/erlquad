@@ -4,11 +4,12 @@
 
 Copyright (c) 2016 Guilherme Andrade
 
-__Version:__ 1.1.0
+__Version:__ 1.1.1
 
 __Authors:__ Guilherme Andrade ([`erlquad(at)gandrade(dot)net`](mailto:erlquad(at)gandrade(dot)net)).
 
 `erlquad`: A simple Erlang quadtree implementation
+
 
 ---------
 
@@ -63,7 +64,6 @@ erlquad:objects_all(Q2), % [#big_square{...}, #tiny_circle{...}, #tiny_circle{..
 erlquad:objects_deep_all(Q2), % [[], [[#big_square{...}, [[], [], ...]], [[[], ...[]]]]]
 
 ```
-
 Define 'COMPILE_NATIVE_ERLQUAD' (e.g. "rebar compile -DCOMPILE_NATIVE_ERLQUAD") for HiPE compilation.
 
 
