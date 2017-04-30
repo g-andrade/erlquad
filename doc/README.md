@@ -1,18 +1,25 @@
-@author Guilherme Andrade <erlquad(at)gandrade(dot)net>
-@copyright 2016 Guilherme Andrade
-@version 1.1.1
-@title erlquad
-@doc `erlquad': A simple Erlang quadtree implementation
 
-<hr/>
 
-`erlquad' is a straightforward Erlang implementation of <a href="https://en.wikipedia.org/wiki/Quadtree">quadtrees</a>, supporting both bounding-box outlines as well as precise coordinates for small enough objects.
+# erlquad #
+
+Copyright (c) 2016 Guilherme Andrade
+
+__Version:__ 1.1.1
+
+__Authors:__ Guilherme Andrade ([`erlquad(at)gandrade(dot)net`](mailto:erlquad(at)gandrade(dot)net)).
+
+`erlquad`: A simple Erlang quadtree implementation
+
+---------
+
+`erlquad` is a straightforward Erlang implementation of [quadtrees](https://en.wikipedia.org/wiki/Quadtree), supporting both bounding-box outlines as well as precise coordinates for small enough objects.
 
 It exposes functions for fetching, folding and any'ing (with boolean predicate) particular areas of interest as well as all contained objects. Deeplist versions of fetching methods are also included for when there's no need to concatenate the intermediate results and thus avoid the overhead of doing so.
 
 Buckets have unlimited capacity and depth is fixed on initialization.
 
-<pre lang="erlang">
+```erlang
+
 Object1 = #big_square{ x = 1000, y = 750,  side = 10 },
 Object2 = #tiny_circle{ x = 3000, y = 1000 },
 Object3 = #tiny_circle{ x = 3000, y = 2000 },
@@ -54,6 +61,14 @@ erlquad:objects_fold(CountCirclesFold, 0, Q2), % 2
 erlquad:objects_all(Q2), % [#big_square{...}, #tiny_circle{...}, #tiny_circle{...}]
 
 erlquad:objects_deep_all(Q2), % [[], [[#big_square{...}, [[], [], ...]], [[[], ...[]]]]]
-</pre>
 
+```
 Define 'COMPILE_NATIVE_ERLQUAD' (e.g. "rebar compile -DCOMPILE_NATIVE_ERLQUAD") for HiPE compilation.
+
+
+## Modules ##
+
+
+<table width="100%" border="0" summary="list of modules">
+<tr><td><a href="erlquad.md" class="module">erlquad</a></td></tr></table>
+
