@@ -1,6 +1,6 @@
 {application, erlquad,
  [{description, "Quadtrees for Erlang"},
-  {vsn, git},
+  {vsn, "git"},
   {registered, []},
   {applications,
    [kernel,
@@ -9,7 +9,6 @@
   {env,[]},
   {modules, []},
 
-  {maintainers, ["Guilherme Andrade"]},
   {licenses, ["MIT"]},
   {links, [{"Github", "https://github.com/g-andrade/erlquad"}]}
  ]}.
