@@ -92,7 +92,7 @@ Buckets have unlimited capacity and depth is fixed on initialization. See the
     children :: {erlquad_node(), erlquad_node(), erlquad_node(), erlquad_node()} | undefined,
     bucket = [] :: [term()]
 }).
--type erlquad_node() :: #erlquad_node{}.
+-opaque erlquad_node() :: #erlquad_node{}.
 -export_type([erlquad_node/0]).
 
 %% ------------------------------------------------------------------
