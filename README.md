@@ -1,23 +1,21 @@
+# erlquad
 
+[![Hex.pm](https://img.shields.io/hexpm/v/erlquad.svg?style=flat)](https://hex.pm/packages/erlquad)
+[![CI](https://github.com/g-andrade/erlquad/actions/workflows/ci.yml/badge.svg)](https://github.com/g-andrade/erlquad/actions/workflows/ci.yml)
+[![Erlang Versions](https://img.shields.io/badge/Supported%20Erlang%2FOTP-24%20to%2029-blue)](https://www.erlang.org)
 
-# erlquad #
+`erlquad` is a straightforward Erlang implementation of
+[quadtrees](https://en.wikipedia.org/wiki/Quadtree), supporting both
+bounding-box outlines as well as precise coordinates for small enough objects.
 
-Copyright (c) 2016 Guilherme Andrade
-
-__Version:__ 1.1.2
-
-__Authors:__ Guilherme Andrade ([`erlquad(at)gandrade(dot)net`](mailto:erlquad(at)gandrade(dot)net)).
-
-`erlquad`: A simple Erlang quadtree implementation
-
-
----------
-
-`erlquad` is a straightforward Erlang implementation of [quadtrees](https://en.wikipedia.org/wiki/Quadtree), supporting both bounding-box outlines as well as precise coordinates for small enough objects.
-
-It exposes functions for fetching, folding and any'ing (with boolean predicate) particular areas of interest as well as all contained objects. Deeplist versions of fetching methods are also included for when there's no need to concatenate the intermediate results and thus avoid the overhead of doing so.
+It exposes functions for fetching, folding and testing (with a boolean
+predicate) particular areas of interest as well as all contained objects.
+Deep-list versions of the fetching functions are also included for when there's
+no need to concatenate the intermediate results.
 
 Buckets have unlimited capacity and depth is fixed on initialization.
+
+Documentation is available on [HexDocs](https://hexdocs.pm/erlquad/).
 
 ```erlang
 
@@ -64,4 +62,14 @@ erlquad:objects_all(Q2), % [#big_square{...}, #tiny_circle{...}, #tiny_circle{..
 erlquad:objects_deep_all(Q2), % [[], [[#big_square{...}, [[], [], ...]], [[[], ...[]]]]]
 
 ```
+
+The `area_query*` functions return a conservative superset of the objects within
+the queried area: no match is ever omitted, but objects sharing a tree node with
+the area may also be returned, so apply your own precise filtering if you need
+exact results.
+
+## License
+
+`erlquad` is released under the MIT License. See the [LICENSE](LICENSE) file for
+details.
 
