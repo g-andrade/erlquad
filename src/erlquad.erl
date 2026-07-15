@@ -1,12 +1,44 @@
--module(erlquad).
--author('Guilherme Andrade <erlquad(at)gandrade(dot)net>').
+%% Copyright (c) 2016-2026 Guilherme Andrade
+%%
+%% Permission is hereby granted, free of charge, to any person obtaining a
+%% copy  of this software and associated documentation files (the "Software"),
+%% to deal in the Software without restriction, including without limitation
+%% the rights to use, copy, modify, merge, publish, distribute, sublicense,
+%% and/or sell copies of the Software, and to permit persons to whom the
+%% Software is furnished to do so, subject to the following conditions:
+%%
+%% The above copyright notice and this permission notice shall be included in
+%% all copies or substantial portions of the Software.
+%%
+%% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+%% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+%% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+%% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+%% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+%% FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+%% DEALINGS IN THE SOFTWARE.
 
--ifdef(COMPILE_NATIVE_ERLQUAD).
-% LOLSPEED ™
--compile([inline, inline_list_funcs, native, {hipe, o3}]).
--else.
--compile([inline, inline_list_funcs]).
+-module(erlquad).
+
+-ifdef(E48).
+-moduledoc """
+A simple Erlang quadtree implementation.
+
+`erlquad` is a straightforward implementation of
+[quadtrees](https://en.wikipedia.org/wiki/Quadtree), supporting both
+bounding-box outlines and precise coordinates for small enough objects.
+
+It exposes functions for fetching, folding and testing (with a boolean
+predicate) particular areas of interest, as well as all contained objects.
+Deep-list variants of the fetching functions are also provided for when there
+is no need to concatenate the intermediate results.
+
+Buckets have unlimited capacity and depth is fixed on initialization. See the
+[README](readme.html) for an overview and examples.
+""".
 -endif.
+
+-compile([inline, inline_list_funcs]).
 
 %% ------------------------------------------------------------------
 %% API Function Exports
@@ -79,6 +111,12 @@
 %% API Function Definitions
 %% ------------------------------------------------------------------
 
+-ifdef(E48).
+-doc """
+Creates an empty quadtree covering the rectangle delimited by `Left`, `Bottom`,
+`Right` and `Top`, recursively subdivided `Depth` levels deep.
+""".
+-endif.
 -spec new(Left :: number(), Bottom :: number(), Right :: number(),
           Top :: number(), Depth :: non_neg_integer())
         -> erlquad_node().
@@ -111,6 +149,12 @@ new(Left, Bottom, Right, Top, Depth) ->
                                    Top,
                                    Depth - 1)}}. % ?QUADRANT_UPPER_RIGHT
 
+-ifdef(E48).
+-doc """
+Adds `Objects` to the tree, using `GetOutlineFun` to obtain each object's
+outline — either precise `t:coordinates/0` or a bounding `t:box/0`.
+""".
+-endif.
 -spec objects_add(Objects :: [term()], GetOutlineFun :: object_outline_fun(), QNode :: erlquad_node())
 -> erlquad_node().
 objects_add(Objects, GetOutlineFun, QNode) ->
@@ -119,6 +163,11 @@ objects_add(Objects, GetOutlineFun, QNode) ->
                 end,
                 QNode, Objects).
 
+-ifdef(E48).
+-doc """
+Returns every object in the tree as a flat list.
+""".
+-endif.
 -spec objects_all(QNode :: erlquad_node()) -> Objects :: [term()].
 objects_all(#erlquad_node{ bucket = Bucket } = QNode) when ?IS_LEAF_NODE(QNode) ->
     Bucket;
@@ -129,6 +178,12 @@ objects_all(#erlquad_node{ bucket = Bucket, children = {C1, C2, C3, C4} }) ->
     ++ objects_all(C3)
     ++ objects_all(C4).
 
+-ifdef(E48).
+-doc """
+Like `objects_all/1`, but returns a nested list mirroring the tree structure,
+avoiding the cost of concatenating the intermediate results.
+""".
+-endif.
 -spec objects_deep_all(QNode :: erlquad_node()) -> ObjectsDeepList :: [term(), ...].
 objects_deep_all(#erlquad_node{ bucket = Bucket } = QNode) when ?IS_LEAF_NODE(QNode) ->
     Bucket;
@@ -139,6 +194,11 @@ objects_deep_all(#erlquad_node{ bucket = Bucket, children = {C1, C2, C3, C4} }) 
      objects_deep_all(C3),
      objects_deep_all(C4)].
 
+-ifdef(E48).
+-doc """
+Folds `FoldFun` over every object in the tree, starting from `FoldAcc0`.
+""".
+-endif.
 -spec objects_fold(FoldFun :: fold_fun(), FoldAcc0 :: term(), QNode :: erlquad_node())
 -> FoldAccN :: term().
 objects_fold(FoldFun, FoldAcc0,
@@ -152,6 +212,12 @@ objects_fold(FoldFun, FoldAcc0,
     FoldAcc4 = objects_fold(FoldFun, FoldAcc3, C3),
     objects_fold(FoldFun, FoldAcc4, C4).
 
+-ifdef(E48).
+-doc """
+Returns `true` if `Predicate` holds for any object in the tree, `false`
+otherwise.
+""".
+-endif.
 -spec objects_any(Precicate :: predicate(), QNode :: erlquad_node()) -> boolean().
 objects_any(Predicate,
             #erlquad_node{ bucket = Bucket } = QNode) when ?IS_LEAF_NODE(QNode) ->
@@ -164,6 +230,16 @@ objects_any(Predicate,
     objects_any(Predicate, C4) orelse
     lists:any(Predicate, Bucket).
 
+-ifdef(E48).
+-doc """
+Returns the objects that may fall within the rectangle delimited by `Left`,
+`Bottom`, `Right` and `Top`.
+
+The result is a conservative superset: no matching object is ever omitted, but
+objects sharing a tree node with the queried area may also be included, so
+callers that need exact results should apply their own filtering.
+""".
+-endif.
 -spec area_query(Left :: number(), Bottom :: number(), Right :: number(), Top :: number(),
                  QNode :: erlquad_node())
         -> Objects :: [term()].
@@ -188,6 +264,12 @@ area_query(Left, Bottom, Right, Top, QNode) ->
                           element(HigherQuadrant, QNode#erlquad_node.children))
     end.
 
+-ifdef(E48).
+-doc """
+Like `area_query/5`, but returns a nested list mirroring the tree structure,
+avoiding the cost of concatenating the intermediate results.
+""".
+-endif.
 -spec area_query_deep(Left :: number(), Bottom :: number(), Right :: number(), Top :: number(),
                       QNode :: erlquad_node())
         -> DeepObjectList :: [term(), ...].
@@ -212,6 +294,15 @@ area_query_deep(Left, Bottom, Right, Top, QNode) ->
                              element(HigherQuadrant, QNode#erlquad_node.children))]
     end.
 
+-ifdef(E48).
+-doc """
+Folds `FoldFun` over the objects that may fall within the rectangle delimited by
+`Left`, `Bottom`, `Right` and `Top`, starting from `FoldAcc0`.
+
+As with `area_query/5`, the visited objects are a conservative superset of those
+strictly within the area.
+""".
+-endif.
 -spec area_query_fold(FoldFun :: fold_fun(), FoldAcc0 :: term(),
                       Left :: number(), Bottom :: number(), Right :: number(), Top :: number(),
                       QNode :: erlquad_node())
@@ -237,6 +328,15 @@ area_query_fold(FoldFun, FoldAcc0, Left, Bottom, Right, Top, QNode) ->
                             element(HigherQuadrant, QNode#erlquad_node.children))
     end.
 
+-ifdef(E48).
+-doc """
+Returns `true` if `Predicate` holds for any object that may fall within the
+rectangle delimited by `Left`, `Bottom`, `Right` and `Top`, `false` otherwise.
+
+As with `area_query/5`, the tested objects are a conservative superset of those
+strictly within the area.
+""".
+-endif.
 -spec area_query_any(Predicate :: predicate(),
                      Left :: number(), Bottom :: number(), Right :: number(), Top :: number(),
                      QNode :: erlquad_node())

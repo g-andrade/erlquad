@@ -64,12 +64,4 @@ erlquad:objects_all(Q2), % [#big_square{...}, #tiny_circle{...}, #tiny_circle{..
 erlquad:objects_deep_all(Q2), % [[], [[#big_square{...}, [[], [], ...]], [[[], ...[]]]]]
 
 ```
-Define 'COMPILE_NATIVE_ERLQUAD' (e.g. "rebar compile -DCOMPILE_NATIVE_ERLQUAD") for HiPE compilation.
-
-
-## Modules ##
-
-
-<table width="100%" border="0" summary="list of modules">
-<tr><td><a href="https://github.com/g-andrade/erlquad/blob/master/doc/erlquad.md" class="module">erlquad</a></td></tr></table>
 
