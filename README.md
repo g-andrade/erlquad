@@ -21,7 +21,7 @@ Add `erlquad` to your `rebar.config` dependencies:
 
 ```erlang
 {deps, [
-    {erlquad, "~> 1.1"}
+    {erlquad, "~> 1.2"}
 ]}.
 ```
 
